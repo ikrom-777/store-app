@@ -117,7 +117,7 @@ jobs:
             APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
 
   deploy:
-    name: Deploy Backend
+    name: Deploy Backend3
     runs-on: self-hosted
     needs: [build-image]
     steps:
