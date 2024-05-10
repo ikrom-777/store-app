@@ -5,21 +5,21 @@ on:
     branches: ["main"]
 
 jobs:
-  compile:
-    runs-on: self-hosted
-    name: Compile project
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup JDK
-        uses: actions/setup-jdk@v4
-        with:
-          java-version: 17
-          distribution: 'corretto'
-
-      - name: Compile project
-        run: |
-          ./mvnw clean compile
+    compile:
+      runs-on: self-hosted
+      name: Compile project
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+  
+        - name: Setup JDK
+          uses: actions/setup-jdk@v4
+          with:
+            java-version: 17
+            distribution: 'corretto'
+  
+        - name: Compile project
+          run: |
+            ./mvnw clean compile
