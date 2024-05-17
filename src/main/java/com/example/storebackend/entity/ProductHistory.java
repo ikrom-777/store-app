@@ -3,6 +3,7 @@ package com.example.storebackend.entity;
 import com.example.storebackend.common.BaseEntity;
 import com.example.storebackend.user.User;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -24,10 +25,10 @@ public class ProductHistory extends BaseEntity {
     private String comment;
     private LocalDateTime time;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Store store;
 }

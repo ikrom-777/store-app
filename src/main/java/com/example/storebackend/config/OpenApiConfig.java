@@ -32,8 +32,13 @@ import io.swagger.v3.oas.annotations.servers.Server;
                         url = "http://localhost:8088/api/v1"
                 ),
                 @Server(
-                        description = "PROD ENV",
+                        description = "TEST ENV",
                         url = "https://aliboucoding.com/course"
+                ),
+                @Server(
+                        description = "PROD ENV",
+                        url = "http://173.249.52.132" +
+                                ":8080/api/v1"
                 )
         },
         security = {

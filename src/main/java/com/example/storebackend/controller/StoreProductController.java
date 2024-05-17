@@ -2,15 +2,16 @@ package com.example.storebackend.controller;
 
 import com.example.storebackend.dto.BuyStoreProductDto;
 import com.example.storebackend.dto.StoreProductDto;
+import com.example.storebackend.dto.StoreProductsResponse;
+import com.example.storebackend.entity.StoreProducts;
 import com.example.storebackend.service.StoreProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("store-product")
@@ -29,5 +30,10 @@ public class StoreProductController {
     public ResponseEntity<?> buyStoreProduct(@RequestBody @Valid BuyStoreProductDto request, Authentication authentication) {
         String message = storeProductService.buyProductFromStore(request, authentication);
         return ResponseEntity.ok(message);
+    }
+    @GetMapping("/get")
+    public ResponseEntity<?> getStoreProduct(Authentication authentication) {
+        List<StoreProductsResponse> storeProducts = storeProductService.getStoreProducts();
+        return ResponseEntity.ok(storeProducts);
     }
 }

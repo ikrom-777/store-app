@@ -2,6 +2,7 @@ package com.example.storebackend.service;
 
 import com.example.storebackend.dto.BuyStoreProductDto;
 import com.example.storebackend.dto.StoreProductDto;
+import com.example.storebackend.dto.StoreProductsResponse;
 import com.example.storebackend.entity.Product;
 import com.example.storebackend.entity.ProductHistory;
 import com.example.storebackend.entity.Store;
@@ -17,6 +18,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -123,5 +126,24 @@ public class StoreProductService {
         newProductHistory.setUser(user);
         productHistoryRepository.save(newProductHistory);
         return "Store product updated successfully";
+    }
+
+    public List<StoreProductsResponse> getStoreProducts() {
+        List<StoreProducts> storeProductsList = storeProductRepository.findAll();
+        if (storeProductsList.isEmpty()) {
+            throw new RuntimeException("Store products not found");
+        }
+        List<StoreProductsResponse> storeProductsResponses = new ArrayList<>();
+        for (StoreProducts storeProduct : storeProductsList) {
+            StoreProductsResponse storeProductsResponse = new StoreProductsResponse(
+                    storeProduct.getStore().getName(),
+                    storeProduct.getProduct().getName(),
+                    storeProduct.getAmount(),
+                    storeProduct.getStatus(),
+                    storeProduct.getDate()
+            );
+            storeProductsResponses.add(storeProductsResponse);
+        }
+        return storeProductsResponses;
     }
 }

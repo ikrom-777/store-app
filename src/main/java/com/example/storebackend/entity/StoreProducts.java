@@ -17,10 +17,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 public class StoreProducts extends BaseEntity {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store",referencedColumnName = "id")
     private Store store;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product",referencedColumnName = "id")
     private Product product;
     private Float amount;

@@ -1,6 +1,7 @@
 package com.example.storebackend.service;
 
 import com.example.storebackend.dto.ProductRequest;
+import com.example.storebackend.dto.ProductResponse;
 import com.example.storebackend.entity.Category;
 import com.example.storebackend.entity.Color;
 import com.example.storebackend.entity.Product;
@@ -13,6 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -86,5 +89,31 @@ public class ProductService {
         productRepository.save(product);
 
         return "Edited-" + product.getId();
+    }
+
+    public List<ProductResponse> getProductList() {
+        List<Product> all = productRepository.findAll();
+        if(all.isEmpty()){
+            throw new RuntimeException("No products found");
+        }
+        List<ProductResponse> responses = new ArrayList<>();
+        for(Product product : all){
+            ProductResponse response = new ProductResponse(
+                    product.getCategory().getName(),
+                    product.getName(),
+                    product.getDescription(),
+                    product.getUnit(),
+                    product.getPrice(),
+                    product.getColor().getName(),
+                    product.getBarcode(),
+                    product.getNumber(),
+                    product.getImage(),
+                    product.getUser().getName(),
+                    product.getDate()
+            );
+            responses.add(response);
+        }
+
+        return responses;
     }
 }
