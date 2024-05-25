@@ -28,9 +28,7 @@ jobs:
           distribution: 'corretto'
 
       - name: Running Unit Tests
-        run: |
-          cd store-app
-          ./mvnw clean compile
+        run:  ./mvnw clean compile
   unit-tests:
     runs-on: self-hosted
     name: Unit tests
@@ -48,8 +46,7 @@ jobs:
           distribution: 'corretto'
 
       - name: Running Unit Tests
-        run: |
-          cd store-app
+        run:
           ./mvnw clean test
   build:
     runs-on: self-hosted
@@ -68,8 +65,7 @@ jobs:
           distribution: 'corretto'
 
       - name: Compile project
-        run: |
-          cd store-app
+        run:
           ./mvnw clean compile
 
   build-image:
@@ -84,8 +80,7 @@ jobs:
           distribution: 'corretto'
       - name: Extract project version
         id: extract_version
-        run: |
-          cd store-app
+        run:
           echo "VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
 
       - name: Login to DockerHub
