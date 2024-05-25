@@ -11,8 +11,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class StoreProductsResponse {
     private String store;
-    private String product;
     private Float amount;
     private String status;
     private LocalDateTime date;
+    private String product;
+    private String description;
+    private String category;
+    private String image;
+    private String price;
+    private String barcode;
+    private String number;
+    private String color;
+    private String unit;
 }

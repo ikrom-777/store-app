@@ -3,20 +3,15 @@ package com.example.storebackend.service;
 import com.example.storebackend.dto.BuyStoreProductDto;
 import com.example.storebackend.dto.StoreProductDto;
 import com.example.storebackend.dto.StoreProductsResponse;
-import com.example.storebackend.entity.Product;
-import com.example.storebackend.entity.ProductHistory;
-import com.example.storebackend.entity.Store;
-import com.example.storebackend.entity.StoreProducts;
-import com.example.storebackend.repository.ProductHistoryRepository;
-import com.example.storebackend.repository.ProductRepository;
-import com.example.storebackend.repository.StoreProductRepository;
-import com.example.storebackend.repository.StoreRepository;
+import com.example.storebackend.entity.*;
+import com.example.storebackend.repository.*;
 import com.example.storebackend.user.User;
 import com.example.storebackend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +26,8 @@ public class StoreProductService {
     private final ProductRepository productRepository;
     private final StoreRepository storeRepository;
     private final ProductHistoryRepository productHistoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final ColorRepository colorRepository;
 
     public String addStoreProduct(StoreProductDto request, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -135,12 +132,39 @@ public class StoreProductService {
         }
         List<StoreProductsResponse> storeProductsResponses = new ArrayList<>();
         for (StoreProducts storeProduct : storeProductsList) {
+            Optional<Product> optionalProduct = productRepository.findById(storeProduct.getProduct().getId());
+            if (optionalProduct.isEmpty()) {
+                throw new RuntimeException("Product not found");
+            }
+            Product product = optionalProduct.get();
+
+            Optional<Category> optionalCategory = categoryRepository.findById(product.getCategory().getId());
+            if (optionalCategory.isEmpty()) {
+                throw new RuntimeException("Category not found");
+            }
+            Category category = optionalCategory.get();
+
+            Optional<Color> optionalColor = colorRepository.findById(product.getColor().getId());
+            if (optionalColor.isEmpty()) {
+                throw new RuntimeException("Color not found");
+            }
+            Color color = optionalColor.get();
+
+
             StoreProductsResponse storeProductsResponse = new StoreProductsResponse(
                     storeProduct.getStore().getName(),
-                    storeProduct.getProduct().getName(),
                     storeProduct.getAmount(),
                     storeProduct.getStatus(),
-                    storeProduct.getDate()
+                    storeProduct.getDate(),
+                    storeProduct.getProduct().getName(),
+                    product.getDescription(),
+                    category.getName(),
+                    product.getImage(),
+                    product.getPrice().toString(),
+                    product.getBarcode(),
+                    product.getNumber(),
+                    color.getName(),
+                    product.getUnit()
             );
             storeProductsResponses.add(storeProductsResponse);
         }

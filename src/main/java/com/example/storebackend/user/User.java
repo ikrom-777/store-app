@@ -50,7 +50,7 @@ public class User implements UserDetails, Principal {
     private String lastname;
     private LocalDate dateOfBirth;
     @Column(unique = true)
-    private String email;
+    private String username;
     private String password;
     private boolean accountLocked;
     private boolean enabled;
@@ -84,7 +84,7 @@ public class User implements UserDetails, Principal {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
@@ -113,7 +113,7 @@ public class User implements UserDetails, Principal {
 
     @Override
     public String getName() {
-        return email;
+        return username;
     }
 
     public String getFullName() {
