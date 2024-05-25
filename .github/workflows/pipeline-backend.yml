@@ -34,6 +34,7 @@ jobs:
   unit-tests:
     runs-on: self-hosted
     name: Unit tests
+    needs: [compile]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
