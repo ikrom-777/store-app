@@ -88,8 +88,8 @@ jobs:
       - name: Build & Push to DockerHub
         uses: docker/build-push-action@v5
         with:
-          context: store-app
-          file: docker/backend/Dockerfile
+          context: ../store-app
+          file: docker/Dockerfile
           push: true
           platforms: linux/amd64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:1.0.0,${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:latest
