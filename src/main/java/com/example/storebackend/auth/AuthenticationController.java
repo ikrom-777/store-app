@@ -30,7 +30,7 @@ public class AuthenticationController {
     public ResponseEntity<?> register(
             @RequestBody @Valid RegistrationRequest request
     ) throws MessagingException {
-        log.info("Registering new user");
+        log.info("Registering new users");
         service.register(request);
         return ResponseEntity.accepted().build();
     }
