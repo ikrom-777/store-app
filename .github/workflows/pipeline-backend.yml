@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - book-network/**
-      - docker/backend/**
+      - docker/**
       - 'docker-compose.yml'
       - .github/workflows/*-backend.yml
 
@@ -96,8 +96,31 @@ jobs:
           build-args: |
             PROFILE=dev
             APP_VERSION=1.0.1
-  
 
+  deploy:
+    name: Deploy Backend
+    runs-on: [ self-hosted, linux ]
+    needs: [ build-image ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install SSH Client
+        run: sudo apt-get install -y openssh-client
+
+      - name: Create deployment folder locally
+        run: mkdir -p ~/ci-cd
+
+      - name: Copy docker-compose file locally
+        run: cp docker-compose.yml ~/ci-cd/docker-compose.yml
+
+      - name: Set ENV variables and deploy locally
+        run: |
+          cd ~/ci-cd
+          docker compose -f docker-compose.yml pull -q
+          docker compose -f docker-compose.yml up -d
 #  deploy:
 #    name: Deploy Backend
 #    runs-on: self-hosted
