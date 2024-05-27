@@ -99,7 +99,7 @@ jobs:
 
   deploy:
     name: Deploy Backend
-    runs-on: [ self-hosted, linux ]
+    runs-on: self-hosted
     needs: [ build-image ]
     steps:
       - name: Checkout code
