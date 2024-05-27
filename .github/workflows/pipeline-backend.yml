@@ -107,20 +107,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install SSH Client
-        run: sudo apt-get install -y openssh-client
-
       - name: Create deployment folder locally
-        run: mkdir -p ~/ci-cd
+        run: New-Item -ItemType Directory -Force -Path $env:USERPROFILE\ci-cd
 
       - name: Copy docker-compose file locally
-        run: cp docker-compose.yml ~/ci-cd/docker-compose.yml
+        run: Copy-Item -Path docker-compose.yml -Destination $env:USERPROFILE\ci-cd\docker-compose.yml
 
       - name: Set ENV variables and deploy locally
         run: |
-          cd ~/ci-cd
-          docker compose -f docker-compose.yml pull -q
-          docker compose -f docker-compose.yml up -d
+          cd $env:USERPROFILE\ci-cd
+          docker-compose -f docker-compose.yml pull -q
+          docker-compose -f docker-compose.yml up -d
+        shell: pwsh
 #  deploy:
 #    name: Deploy Backend
 #    runs-on: self-hosted
