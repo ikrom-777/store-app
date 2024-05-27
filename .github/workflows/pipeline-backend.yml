@@ -99,7 +99,7 @@ jobs:
 
   deploy:
     name: Deploy Backend
-    runs-on: self-hosted
+    runs-on: [ self-hosted, windows ]
     needs: [ build-image ]
     steps:
       - name: Checkout code
@@ -108,17 +108,21 @@ jobs:
           fetch-depth: 0
 
       - name: Create deployment folder locally
-        run: New-Item -ItemType Directory -Force -Path $env:USERPROFILE\ci-cd
+        run: |
+          New-Item -ItemType Directory -Force -Path $env:USERPROFILE\ci-cd
+        shell: powershell
 
       - name: Copy docker-compose file locally
-        run: Copy-Item -Path docker-compose.yml -Destination $env:USERPROFILE\ci-cd\docker-compose.yml
+        run: |
+          Copy-Item -Path docker-compose.yml -Destination $env:USERPROFILE\ci-cd\docker-compose.yml
+        shell: powershell
 
       - name: Set ENV variables and deploy locally
         run: |
           cd $env:USERPROFILE\ci-cd
           docker-compose -f docker-compose.yml pull -q
           docker-compose -f docker-compose.yml up -d
-        shell: pwsh
+        shell: powershell
 #  deploy:
 #    name: Deploy Backend
 #    runs-on: self-hosted
