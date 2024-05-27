@@ -14,11 +14,11 @@ services:
     networks:
       - spring-demo
     restart: unless-stopped
-  sta-api:
+  sta-api-image:
     container_name: sta-api
-    image: sta/sta:1.0.1
+    image: sta/sta:1.0.0
     ports:
-      - 8090:8090
+      - 8080:8080
     networks:
       - spring-demo
     depends_on:

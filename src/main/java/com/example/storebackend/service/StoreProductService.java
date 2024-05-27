@@ -2,6 +2,7 @@ package com.example.storebackend.service;
 
 import com.example.storebackend.dto.BuyStoreProductDto;
 import com.example.storebackend.dto.StoreProductDto;
+import com.example.storebackend.dto.StoreProductTwoDto;
 import com.example.storebackend.dto.StoreProductsResponse;
 import com.example.storebackend.entity.*;
 import com.example.storebackend.repository.*;
@@ -149,10 +150,8 @@ public class StoreProductService {
                 throw new RuntimeException("Color not found");
             }
             Color color = optionalColor.get();
-
-
             StoreProductsResponse storeProductsResponse = new StoreProductsResponse(
-                    storeProduct.getStore().getName(),
+                    null,
                     storeProduct.getAmount(),
                     storeProduct.getStatus(),
                     storeProduct.getDate(),
@@ -169,5 +168,56 @@ public class StoreProductService {
             storeProductsResponses.add(storeProductsResponse);
         }
         return storeProductsResponses;
+    }
+
+    public String addStoreProductTwo(StoreProductTwoDto request, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        Optional<Color> optionalColor = colorRepository.findById(request.getColor());
+        if (optionalColor.isEmpty()) {
+            throw new RuntimeException("Color not found");
+        }
+        Optional<Category> optionalCategory = categoryRepository.findById(request.getCategory());
+        if (optionalCategory.isEmpty()) {
+            throw new RuntimeException("Category not found");
+        }
+        Category category = optionalCategory.get();
+        Color color = optionalColor.get();
+
+        Product product = Product.builder()
+                .name(request.getName())
+                .description(request.getDescription())
+                .price(request.getPrice())
+                .barcode(request.getBarcode())
+                .color(color)
+                .date(LocalDateTime.now())
+                .category(category)
+                .unit(request.getUnit())
+                .number(request.getNumber())
+                .user(user)
+                .build();
+        Product savedProduct = productRepository.save(product);
+
+        StoreProducts storeProducts = new StoreProducts();
+
+        storeProducts.setStore(null);
+        storeProducts.setProduct(savedProduct);
+        storeProducts.setAmount(request.getAmount());
+        storeProducts.setStatus("ACTIVE");
+        storeProducts.setDate(LocalDateTime.now());
+        StoreProducts save = storeProductRepository.save(storeProducts);
+
+        ProductHistory newProductHistory = new ProductHistory();
+        newProductHistory.setProduct(savedProduct);
+        newProductHistory.setStore(null);
+        newProductHistory.setAmount(request.getAmount());
+        newProductHistory.setAction("INCOME");
+        newProductHistory.setUniquePrice(request.getPrice());
+        newProductHistory.setTime(LocalDateTime.now());
+        newProductHistory.setUser(user);
+        productHistoryRepository.save(newProductHistory);
+
+
+        return "Store product and Product added successfully";
     }
 }

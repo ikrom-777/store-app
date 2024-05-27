@@ -1,9 +1,11 @@
 package com.example.storebackend.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,8 +29,15 @@ public class JwtService {
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        try {
+            final Claims claims = extractAllClaims(token);
+            return claimsResolver.apply(claims);
+        } catch (ExpiredJwtException e) {
+            // Handle expired token case
+            throw new RuntimeException("JWT token is expired", e);
+        } catch (SignatureException e) {
+            throw new RuntimeException("Invalid JWT signature", e);
+        }
     }
 
     public String generateToken(UserDetails userDetails) {

@@ -2,6 +2,7 @@ package com.example.storebackend.controller;
 
 import com.example.storebackend.dto.BuyStoreProductDto;
 import com.example.storebackend.dto.StoreProductDto;
+import com.example.storebackend.dto.StoreProductTwoDto;
 import com.example.storebackend.dto.StoreProductsResponse;
 import com.example.storebackend.entity.StoreProducts;
 import com.example.storebackend.service.StoreProductService;
@@ -23,6 +24,12 @@ public class StoreProductController {
     @PostMapping("/add")
     public ResponseEntity<?> addStoreProduct(@RequestBody @Valid StoreProductDto request, Authentication authentication) {
         String message = storeProductService.addStoreProduct(request, authentication);
+        return ResponseEntity.ok(message);
+    }
+
+    @PostMapping("/store-product-two")
+    public ResponseEntity<?> addStoreProductTwo(@RequestBody @Valid StoreProductTwoDto request, Authentication authentication) {
+        String message = storeProductService.addStoreProductTwo(request, authentication);
         return ResponseEntity.ok(message);
     }
 
