@@ -95,7 +95,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:1.0.0
           build-args: |
             PROFILE=dev
-            APP_VERSION=1.0.1
+            APP_VERSION=1.0.0
 
   deploy:
     name: Deploy Backend

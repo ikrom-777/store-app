@@ -15,7 +15,7 @@ services:
       - spring-demo
     restart: unless-stopped
   sta-api-image:
-    container_name: sta-api
+    container_name: sta-api-back
     image: ikromnajmiddinov/bsn-api:1.0.0
     ports:
       - 8080:8080
