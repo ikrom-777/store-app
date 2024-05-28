@@ -16,7 +16,7 @@ services:
     restart: unless-stopped
   sta-api-image:
     container_name: sta-api
-    image: sta/sta:1.0.0
+    image: ikromnajmiddinov/bsn-api:1.0.0
     ports:
       - 8080:8080
     networks:
